@@ -1,0 +1,121 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+int stack[10];
+int Top = -1;
+void push(int item)
+{
+	stack[++Top] = item;
+}
+int Pop() // popping elements
+{
+	return stack[Top--];
+}
+struct Queue {
+	int info;
+	Queue* next;
+};
+Queue* front = NULL;
+Queue* tail = NULL;
+void Enqueue(int item)
+{
+	Queue* newNode = new Queue;
+	newNode->info = item;
+	// Condition one if the queue is empty
+	if (front == NULL)
+		front = tail = newNode;
+	else
+	{
+		tail->next = newNode;
+		tail = newNode;
+		newNode->next = NULL;
+	}
+}
+int Dequeue()
+{
+	// first condition if the que has one element 
+	int deletedelement;
+	Queue* temp = front;
+	if (front == tail)
+	{
+		deletedelement = temp->info;
+		delete temp;
+		front = tail = NULL;
+	}
+	else
+	{
+		front = front->next;
+		deletedelement = temp->info;
+		delete temp;
+	}
+	return deletedelement;
+}
+void traverse()
+{
+	Queue* temp = front;
+	cout << "\t";
+	while (temp != NULL)
+	{
+
+		cout << temp->info << " ";
+		temp = temp->next;
+	}
+	cout << endl;
+}
+void Reversing(int st, int en)
+{
+	Queue* temp = front;
+	int counter = 0;
+	while (temp != NULL) // here my goal to reach start point
+	{
+		if (counter == st)
+			break;
+		counter++;
+		temp = temp->next;
+	}
+	//cout << temp->info;
+	int last = counter; // i assigned last to coutner to reach the end point 
+	Queue* hold = temp;
+	while (temp != NULL)
+	{
+		if (last == en)
+			break;
+		last++;
+		push(temp->info); // in same loop im going to push every element in between start and end to the stack
+		temp = temp->next;
+	} 
+	push(temp->info); // since the condition satsified so we have the last element didnt pushed yet so i pushed it
+	int k = counter;
+	while (hold->info != NULL) // for this part im going to Pop from the stack to every element between start and end
+	{
+		if (hold->info == temp->info)
+			break;
+		hold->info = Pop();
+		hold = hold->next;
+	}
+	hold->info = Pop(); // again the condition is done but we have the last element didnt pushed yet so i pushed it 
+	cout << "\tQueue elements after reversing:\n";
+}
+int main()
+{
+	int x, s, e;
+	cout << "\n\t\tHello\n";
+	cout << "\n\tPlease enter 9 elements:\n";
+	for (int i = 0; i < 9; i++)
+	{
+		cout << "\t-->";
+		cin >> x;
+		Enqueue(x);
+	}
+	cout << "\tQueue elements are:\n";
+	traverse();
+	cout << "\tEnter Start point -> ";
+	cout << "\t";
+	cin >> s;
+	cout << "\tEnter End point ->";
+	cin >> e;
+	Reversing(s, e);
+	cout << "\tFinal Output ->";
+	traverse();
+	return 0;
+}
