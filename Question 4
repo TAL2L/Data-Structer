@@ -1,0 +1,94 @@
+#include <iostream>
+using namespace std;
+#define SIZE 7
+int stack[SIZE];
+int Top = -1;
+void push(int item)
+{
+	stack[++Top] = item;
+}
+int Pop()
+{
+	return stack[Top--];
+}
+void traverse()
+{
+	int TopNum = Top; 
+	do {
+		cout << stack[TopNum--] << endl;
+
+	} while (TopNum >= 0);
+	cout << endl;
+}
+void decToBinary(int x) // here we got pop() from stack and pushing it to the function
+{
+	int bianryArr[32];
+	int i =0;
+	if (x < 0) // as you asked if its negative we ignore it
+		return;
+	else // here i ussed binary alogrthim to convert decimal
+	{
+		while (x > 0)
+		{
+			 int binary = x % 2;
+			 bianryArr[i] = binary;
+			 i++;
+			 x = x / 2;
+		}
+		bianryArr[i] = x;
+		for (int j = i; j >= 0; j--) // for printing binary value 
+			cout << bianryArr[j];
+	}
+}
+int main()
+{
+	int count = 0;
+	cout << "Welcome\n";
+	int op;
+	while (1)
+	{
+		
+		cout << "\n[1]Push\n[2]Pop\n[3]Traverse\n[4]Converting to Binary\n";
+		cin >> op;
+	switch (op)
+	{
+	case 1:
+		if (Top > SIZE - 1)
+			cout << "Stack is full\n";
+		else
+		{ 
+		int c;
+		cout << "Push--> ";
+		cin >> c;
+		push(c);
+		count++;
+		}
+		break;
+	case 2:
+		cout << "You popped " << Pop() << " From Stack!";
+		break;
+	case 3:
+		if (Top < 0)
+			cout << "Stack is empty!";
+		else
+		{ 
+		cout << "Stack elements: \n";
+		traverse();
+		}
+		break;
+	case 4:
+		cout << "Stack elements:\n";
+		for (int j = 0; j < count; j++)
+		{
+			decToBinary(Pop());
+			cout << endl;
+		}
+		break;
+	default:
+		cout << "Wrong entry!";
+		break;
+		
+	}
+	}
+	return 0;
+}
