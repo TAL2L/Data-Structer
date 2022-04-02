@@ -1,0 +1,110 @@
+#include <iostream>
+#include <stdlib.h>
+using namespace std;
+int Top = -1; // Stack Top
+int* stackArray, * tempStack; // Global dynamic stacks
+void Push(int); /* Funcation prototype */
+int Pop(void);	/* Funcation prototype */
+void pushTotemp(int item); // for pushing elemetns form stack 1 to temp Stack
+int popTemp();
+void traverse(int); // For travers stack elements in Accending order
+int main()
+{
+
+	int N; // Size of stack
+	cout << "\n\n\tWelcome Please Enter The Size Of Stack: ";
+	cin >> N;
+	stackArray = new int(N); //  dynamic array
+	tempStack = new int(N); // dynamic array
+	while (1)
+	{
+		cout << "\n\n\tChose the operation: \n\t[1]Push\n\t[2]Pop\n\t[3]Traverse\n\t[4]Exit";
+		int op; //operation key
+		cout << "\n\n\tEnter here --> ";
+		cin >> op;
+		int item;
+		switch (op)
+		{
+		case 1:
+			if (Top == N - 1)
+			{
+				cout << "\tStack is full";
+				break;
+			}
+
+			for (int i = 0; i < N && Top != N - 1; i++) // two condition to make sure the element is not greater than Size N
+			{
+				cout << "\tPush the number-> ";
+				cin >> item;
+				Push(item); 
+				pushTotemp(Pop()); // every pushed is poped to temp stack 
+			}
+			break;
+		case 2:
+			if (Top < 0) {
+				cout << "\tStack is empty";
+				break;
+			}
+			if (Top <= -1)
+				break;
+			cout << "\tYou Popped " << popTemp() << " From Stack!";
+
+			break;
+		case 3:
+			if (Top < 0)
+				cout << "\tStack is empty!";
+			else
+			{
+				cout << "\tStack elements:\n";
+				traverse(N);
+			}
+			break;
+		case 4:
+			exit(0);
+		default:
+			cout << "\tWrong Entry! Try again";
+			break;
+		}
+	}
+
+	return 0;
+}
+
+void Push(int item) // pushing elements as usual in stack
+{
+	stackArray[++Top] = item;
+}
+int Pop() // popping elements
+{
+	return stackArray[Top--];
+}
+int popTemp()
+{
+	return tempStack[Top--];
+}
+void traverse(int N) // Now before we traverse I used the bubblesort with the tempStack to re arrange the array before traversing 
+{
+	int hold;
+	for (int pass = 1; pass < N; pass++)
+	{
+		for (int i = 0; i < N - pass; i++)
+		{
+			if (tempStack[i] < tempStack[i + 1])
+			{
+				hold = tempStack[i];
+				tempStack[i] = tempStack[i + 1];
+				tempStack[i + 1] = hold;
+			}
+		}
+	}
+	int TopNum = Top; // then I start traversing it  and now we got a stack in Decending order :) because we know the top of the stack is the last element
+	do {
+		cout << "\t";
+		cout << tempStack[TopNum--] << endl;
+
+	} while (TopNum >= 0);
+}
+void pushTotemp(int item) // we pop from stackArray to be input in tempStack like this pushTotemp(Pop());  
+{
+	tempStack[++Top] = item;
+}
